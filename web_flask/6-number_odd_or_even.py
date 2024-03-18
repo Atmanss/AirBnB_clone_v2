@@ -1,73 +1,52 @@
 #!/usr/bin/python3
-
-"""
-Simple flask server with three end points /,  /hbnb and /c
-and listens on port 5000
-"""
-
+""" Starts a Flask web application """
 from flask import Flask, render_template
-
 app = Flask(__name__)
+app.url_map.strict_slashes = False
 
 
-@app.route('/', strict_slashes=False)
-def hello_holberton():
-    """
-    route to / to Display Hello HBNB on any request
-    """
-    return "Hello HBNB!"
+@app.route('/')
+def hello_hbnb():
+    """ Function that sys Hello Hbnb"""
+    return 'Hello HBNB!'
 
 
-@app.route("/hbnb", strict_slashes=False)
-def hbnb_route():
-    """
-    Route to /hbnb to display HBNB on any request
-    """
-    return "HBNB"
+@app.route('/hbnb')
+def hbnb():
+    """ Function that says hbnb """
+    return 'HBNB'
 
 
-@app.route("/c/<string:text>", strict_slashes=False)
-def c_is_fun(text):
-    """Route to /c to display 'C' followed by text"""
-    return "C {}".format(text.replace("_", " "))
+@app.route('/c/<text>')
+def c_compliment(text):
+    """ Display a message starting with C """
+    message = text.replace('_', ' ')
+    return 'C %s' % message
 
 
-@app.route("/python", strict_slashes=False)
-@app.route("/python/<string:text>", strict_slashes=False)
-def python_is(text="is cool"):
-    """Route to /c to display 'C' followed by text"""
-    return "Python {}".format(text.replace("_", " "))
+@app.route('/python/')
+@app.route('/python/<text>')
+def python_compliment(text='is_cool'):
+    """ Display a message starting with Python """
+    message = text.replace('_', ' ')
+    return 'Python %s' % message
 
 
-@app.route("/number/<int:n>", strict_slashes=False)
-def is_number(n):
-    """ Route to /number to dispaly n, if its an integer"""
-    if isinstance(n, int):
-        return "{} is a number".format(n)
+@app.route('/number/<int:n>')
+def display_integer(n):
+    """ Display n is a number only if n is an integer """
+    return "%d is a number" % n
 
 
-@app.route("/number_template/<int:n>", strict_slashes=False)
-def is_number_template(n):
-    """route to /number_template
-    Return a template if n is an interger
-    """
-    if isinstance(n, int):
-        return render_template("5-number.html", number=n)
+@app.route('/number_template/<int:n>')
+def number_page(n):
+    return render_template('5-number.html', number=n)
 
 
-@app.route("/number_odd_or_even/<int:n>", strict_slashes=False)
-def number_odd_or_even(n):
-    """
-    Route to /number_odd_or_even/ return a template
-    indicating in n is odd or even
-    """
-    if isinstance(n, int):
-        if n % 2 == 0:
-            text = "Number: {} is even".format(n)
-        else:
-            text = "Number: {} is odd".format(n)
-        return render_template("6-number_odd_or_even.html", text=text)
+@app.route('/number_odd_or_even/<int:n>')
+def number_info(n):
+    return render_template('6-number_odd_or_even.html', number=n)
 
 
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000)

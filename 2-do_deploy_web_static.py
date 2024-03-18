@@ -1,40 +1,52 @@
 #!/usr/bin/python3
-
 """
-Deploy the to a remote server
-Usage: ./2_do_deploy_web_static.py do_deploy
+Distributes an archive to my web servers,
+using the function do_deploy
 """
+from fabric.api import *
+from datetime import datetime
+import os
 
-from fabric.api import env, task, put, run, sudo
-from os import path
-
-env.hosts = ['54.146.84.110', '100.26.156.138']
+env.hosts = ['54.144.136.64', '100.24.236.179']
 env.user = 'ubuntu'
 
 
-@task(alias="deploy")
-def do_deploy(archive_path) -> bool:
-    """
-    Deploy the application to the web servers
-    Args:
-        None
-    Returns:
-        True ( if all goes well)
-        False (if something is not right)
-    """
-    if not path.exists(archive_path):
-        return False
+def do_pack():
+    '''
+    Generates a tgz archive from the
+    contents of the web_static folder
+    '''
     try:
-        arc = archive_path.split("/")
-        base_loc = arc[1].strip('.tgz')
+        local('mkdir -p versions')
+        datetime_format = '%Y%m%d%H%M%S'
+        archive_path = 'versions/web_static_{}.tgz'.format(
+            datetime.now().strftime(datetime_format))
+        local('tar -cvzf {} web_static'.format(archive_path))
+        print('web_static packed: {} -> {}'.format(archive_path,
+              os.path.getsize(archive_path)))
+    except:
+        return None
+
+
+def do_deploy(archive_path):
+    '''
+    Deploy archive to web server
+    '''
+    if not os.path.exists(archive_path):
+        return False
+    file_name = archive_path.split('/')[1]
+    file_path = '/data/web_static/releases/'
+    releases_path = file_path + file_name[:-4]
+    try:
         put(archive_path, '/tmp/')
-        sudo('mkdir -p /data/web_static/releases/{}'.format(base_loc))
-        main_loc = "/data/web_static/releases/{}".format(base_loc)
-        sudo('tar -xzf /tmp/{} -C {}/'.format(arc[1], main_loc))
-        sudo('rm /tmp/{}'.format(arc[1]))
-        sudo('mv {}/web_static/* {}/'.format(main_loc, main_loc))
-        sudo('rm -rf /data/web_static/current')
-        sudo('ln -s {}/ "/data/web_static/current"'.format(main_loc))
+        run('mkdir -p {}'.format(releases_path))
+        run('tar -xzf /tmp/{} -C {}'.format(file_name, releases_path))
+        run('rm /tmp/{}'.format(file_name))
+        run('mv {}/web_static/* {}/'.format(releases_path, releases_path))
+        run('rm -rf {}/web_static'.format(releases_path))
+        run('rm -rf /data/web_static/current')
+        run('ln -s {} /data/web_static/current'.format(releases_path))
+        print('New version deployed!')
         return True
-    except Exception:
+    except:
         return False
