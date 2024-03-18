@@ -12,7 +12,7 @@ from models.amenity import Amenity
 from models.review import Review
 
 
-class HBNBCommand(cmd.Cmd):
+class HBNB_Command(cmd.Cmd):
     """ Contains the functionality for the HBNB console"""
 
     # determines prompt for interactive/non-interactive modes
