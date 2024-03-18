@@ -12,7 +12,7 @@ from models.amenity import Amenity
 from models.review import Review
 
 
-class HBNB_Command(cmd.Cmd):
+class HBNBCommand(cmd.Cmd):
     """ Contains the functionality for the HBNB console"""
 
     # determines prompt for interactive/non-interactive modes
@@ -30,12 +30,12 @@ class HBNB_Command(cmd.Cmd):
         'latitude': float, 'longitude': float
     }
 
-    def preloop(self):
+    def prloop(self):
         """Prints if isatty is false"""
         if not sys.__stdin__.isatty():
             print('(hbnb)')
 
-    def precmd(self, line):
+    def prcmd(self, line):
         """Reformat command line for advanced command syntax.
 
         Usage: <class name>.<command>([<id> [<*args> or <**kwargs>]])
