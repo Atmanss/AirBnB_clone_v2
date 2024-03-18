@@ -1,15 +1,15 @@
 #!/usr/bin/python3
 """
-Fabric script that Generates a .tgz archive
+a script that Generates a .tgz archive
 """
 from fabric.api import local
 from datetime import datetime
 import os
 
 
-def do_pack():
+def lets_pack():
     '''
-    Generates a tgz archive from the
+    Generates a .tgz archive from the
     contents of the web_static folder
     '''
     try:

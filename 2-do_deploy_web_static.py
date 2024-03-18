@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 """
-Distributes an archive to my web servers,
-using the function do_deploy
+Distributes an archive to my web servers using the function do_deploy
 """
 from fabric.api import *
 from datetime import datetime
@@ -11,9 +10,9 @@ env.hosts = ['54.144.136.64', '100.24.236.179']
 env.user = 'ubuntu'
 
 
-def do_pack():
+def lets_pack():
     '''
-    Generates a tgz archive from the
+    Generates a .tgz archive from the
     contents of the web_static folder
     '''
     try:
@@ -28,9 +27,9 @@ def do_pack():
         return None
 
 
-def do_deploy(archive_path):
+def lets_deploy(archive_path):
     '''
-    Deploy archive to web server
+    Deploy archive to the web server
     '''
     if not os.path.exists(archive_path):
         return False
