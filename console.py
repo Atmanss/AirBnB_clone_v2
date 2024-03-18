@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-""" Console Modules"""
+""" Console Module """
 import cmd
 import sys
 from models.base_model import BaseModel
@@ -12,8 +12,8 @@ from models.amenity import Amenity
 from models.review import Review
 
 
-class HBNB_Command(cmd.Cmd):
-    """ This Class Contains the functionality for the HBNB console"""
+class HBNBCommand(cmd.Cmd):
+    """ Contains the functionality for the HBNB console"""
 
     # determines prompt for interactive/non-interactive modes
     prompt = '(hbnb) ' if sys.__stdin__.isatty() else ''
