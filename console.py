@@ -43,7 +43,7 @@ class HBNBCommand(cmd.Cmd):
         """
         _cmd = _cls = _id = _args = ''  # initialize line elements
 
-        # scan for general formating - i.e '.', '(', ')'
+        # scan for general formating like - i.e '.', '(', ')'
         if not ('.' in line and '(' in line and ')' in line):
             return line
 
@@ -92,7 +92,7 @@ class HBNBCommand(cmd.Cmd):
             print('(hbnb) ', end='')
         return stop
 
-    def do_quit(self, command):
+    def quit(self, command):
         """ Method to exit the HBNB console"""
         exit()
 
@@ -109,7 +109,7 @@ class HBNBCommand(cmd.Cmd):
         """ Prints the help documentation for EOF """
         print("Exits the program without formatting\n")
 
-    def emptyline(self):
+    def empty_line(self):
         """ Overrides the emptyline method of CMD """
         pass
 
@@ -303,10 +303,10 @@ class HBNBCommand(cmd.Cmd):
 
             args = [att_name, att_val]
 
-        # retrieve dictionary of current objects
+        # retrieve dictionary of the current objects
         new_dict = storage.all()[key]
 
-        # iterate through attr names and values
+        # iterate through attributes names and values
         for i, att_name in enumerate(args):
             # block only runs on even iterations
             if (i % 2 == 0):
@@ -321,7 +321,7 @@ class HBNBCommand(cmd.Cmd):
                 if att_name in HBNBCommand.types:
                     att_val = HBNBCommand.types[att_name](att_val)
 
-                # update dictionary with name, value pair
+                # update dictionary with name and value pair
                 new_dict.__dict__.update({att_name: att_val})
 
         new_dict.save()  # save updates to file
