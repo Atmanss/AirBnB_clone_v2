@@ -1,8 +1,7 @@
 #!/usr/bin/python3
-""" The Console Module """
+""" Console Module """
 import cmd
 import sys
-from datetime import datetime
 from models.base_model import BaseModel
 from models.__init__ import storage
 from models.user import User
@@ -14,9 +13,9 @@ from models.review import Review
 
 
 class HBNBCommand(cmd.Cmd):
-    """ The Class The Contains the functionality for the HBNB console"""
+    """ Contains the functionality for the HBNB console"""
 
-    # determines prompt for interactive & non-interactive modes
+    # determines prompt for interactive/non-interactive modes
     prompt = '(hbnb) ' if sys.__stdin__.isatty() else ''
 
     classes = {
@@ -31,13 +30,13 @@ class HBNBCommand(cmd.Cmd):
         'latitude': float, 'longitude': float
     }
 
-    def prloop(self):
-        """Will Prints if isatty is false"""
+    def preloop(self):
+        """Prints if isatty is false"""
         if not sys.__stdin__.isatty():
             print('(hbnb)')
 
-    def prcmd(self, line):
-        """Will Reformat command line for advanced command syntax.
+    def precmd(self, line):
+        """Reformat command line for advanced command syntax.
 
         Usage: <class name>.<command>([<id> [<*args> or <**kwargs>]])
         (Brackets denote optional fields in usage example.)
@@ -54,7 +53,7 @@ class HBNBCommand(cmd.Cmd):
             # isolate <class name>
             _cls = pline[:pline.find('.')]
 
-            # isolate & validate <command>
+            # isolate and validate <command>
             _cmd = pline[pline.find('.') + 1:pline.find('(')]
             if _cmd not in HBNBCommand.dot_cmds:
                 raise Exception
@@ -65,7 +64,7 @@ class HBNBCommand(cmd.Cmd):
                 # partition args: (<id>, [<delim>], [<*args>])
                 pline = pline.partition(', ')  # pline convert to tuple
 
-                # isolate _id and stripping quotes
+                # isolate _id, stripping quotes
                 _id = pline[0].replace('\"', '')
                 # possible bug here:
                 # empty quotes register as empty _id when replaced
@@ -137,7 +136,7 @@ class HBNBCommand(cmd.Cmd):
             setattr(new_instance, key, value)
         new_instance.save()  # Save to storage
 
-    def help_to_create(self):
+    def help_create(self):
         """ Help information for the create method """
         print("Creates a class of any type")
         print("[Usage]: create <className>\n")
@@ -203,14 +202,14 @@ class HBNBCommand(cmd.Cmd):
         except KeyError:
             print("** no instance found **")
 
-    def help_to_destroy(self):
+    def help_destroy(self):
         """ Help information for the destroy command """
         print("Destroys an individual instance of a class")
         print("[Usage]: destroy <className> <objectId>\n")
 
     def do_all(self, args):
         """ Shows all objects, or all objects of a class"""
-        print_lis = []
+        print_list = []
         objects = storage.all()
 
         if args:
@@ -220,12 +219,12 @@ class HBNBCommand(cmd.Cmd):
                 return
             for k, v in objects.items():
                 if k.split('.')[0] == args:
-                    print_lis.append(str(v))
+                    print_list.append(str(v))
         else:
             for k, v in objects.items():
-                print_lis.append(str(v))
+                print_list.append(str(v))
 
-        print(print_lis)
+        print(print_list)
 
     def help_all(self):
         """ Help information for the all command """
